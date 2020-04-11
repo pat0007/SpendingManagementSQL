@@ -5,4 +5,7 @@
     <string name="dining_out_hint">Dining Out</string>
     <string name="enter_btn_text">Enter</string>
     <string name="history">History</string>
+    <string name="col1Header">Date</string>
+    <string name="col2Header">Amount</string>
+    <string name="col3Header">Category</string>
 </resources>
