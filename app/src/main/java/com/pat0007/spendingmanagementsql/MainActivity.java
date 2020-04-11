@@ -25,14 +25,7 @@ public class MainActivity extends AppCompatActivity {
     private View.OnClickListener listen = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            switch(v.getId()) {
-                case R.id.add_btn:
-                    add_btn_clicked();
-                    break;
-                case R.id.minus_btn:
-                    minus_btn_clicked();
-                    break;
-            }
+            add_btn_clicked();
         }
     };
 
@@ -47,11 +40,11 @@ public class MainActivity extends AppCompatActivity {
         amount = findViewById(R.id.amount);
         purpose = findViewById(R.id.purpose);
         add_btn = findViewById(R.id.add_btn);
-        minus_btn = findViewById(R.id.minus_btn);
         applicationContext = this;
 
         add_btn.setOnClickListener(listen);
-        minus_btn.setOnClickListener(listen);
+
+        balance = BigDecimal.ZERO;
     }
 
     private void add_btn_clicked() {
@@ -65,16 +58,5 @@ public class MainActivity extends AppCompatActivity {
         header.setText("Current Balance: $" + balance);
 
         myDB.insertData(dateText, amountText, purposeText);
-    }
-
-    private void minus_btn_clicked() {
-        String dateText = date.getText().toString();
-        String amountText = amount.getText().toString();
-        String purposeText = purpose.getText().toString();
-
-        BigDecimal newBalance = new BigDecimal(amountText);
-
-        balance = balance.subtract(newBalance);
-        header.setText("Current Balance: $" + balance);
     }
 }

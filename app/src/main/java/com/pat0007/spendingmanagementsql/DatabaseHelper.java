@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-
 import androidx.annotation.Nullable;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
@@ -33,8 +32,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public boolean insertData(String date, String amount, String category) {
-        SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
+        SQLiteDatabase db = this.getWritableDatabase();
+
         contentValues.put(COL_2, date);
         contentValues.put(COL_3, amount);
         contentValues.put(COL_4, category);
