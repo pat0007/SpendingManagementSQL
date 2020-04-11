@@ -11,3 +11,10 @@ Modified version of the SpendingManagement program, this time utilizing SQLite.
 Empty History UI sketch:
 
 <img src="images/emptyHistoryUI.png" width="250" >
+
+UI sketch with entries:
+
+<img src="images/populatedDataUI.png" width="250" >
+
+## Test Case Video
+File is "testCases.mp4" found in the root folder.
