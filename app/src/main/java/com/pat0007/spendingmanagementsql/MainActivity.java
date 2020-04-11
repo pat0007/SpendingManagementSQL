@@ -15,17 +15,16 @@ import java.math.BigDecimal;
 public class MainActivity extends AppCompatActivity {
 
     BigDecimal balance;
-    Button add_btn, minus_btn;
+    Button enter_btn;
     Context applicationContext;
     DatabaseHelper myDB;
     EditText date, amount, purpose;
-    String history;
     TextView header;
 
     private View.OnClickListener listen = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            add_btn_clicked();
+            enter_btn_clicked();
         }
     };
 
@@ -39,15 +38,15 @@ public class MainActivity extends AppCompatActivity {
         date = findViewById(R.id.date);
         amount = findViewById(R.id.amount);
         purpose = findViewById(R.id.purpose);
-        add_btn = findViewById(R.id.add_btn);
+        enter_btn = findViewById(R.id.enter_btn);
         applicationContext = this;
 
-        add_btn.setOnClickListener(listen);
+        enter_btn.setOnClickListener(listen);
 
         balance = BigDecimal.ZERO;
     }
 
-    private void add_btn_clicked() {
+    private void enter_btn_clicked() {
         String dateText = date.getText().toString();
         String amountText = amount.getText().toString();
         String purposeText = purpose.getText().toString();
