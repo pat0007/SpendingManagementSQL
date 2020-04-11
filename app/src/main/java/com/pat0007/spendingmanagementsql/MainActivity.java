@@ -3,7 +3,10 @@ package com.pat0007.spendingmanagementsql;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,6 +23,8 @@ public class MainActivity extends AppCompatActivity {
     Context applicationContext;
     DatabaseHelper myDB;
     EditText date, amount, purpose;
+    SharedPreferences sharedPref;
+    SharedPreferences.Editor editor;
     TableLayout tableLayout;
     TextView header;
 
@@ -44,8 +49,28 @@ public class MainActivity extends AppCompatActivity {
         tableLayout = findViewById(R.id.transactionsTable);
         applicationContext = this;
 
+        sharedPref = getSharedPreferences(
+                "com.pat0007.spendingmanagementsql.PREFERENCE_FILE_KEY", MODE_PRIVATE);
+
         enter_btn.setOnClickListener(listen);
-        balance = BigDecimal.ZERO;
+
+        balance = new BigDecimal(sharedPref.getString("BALANCE", "0"));
+        header.setText(sharedPref.getString("HEADER", "Current Balance: $0"));
+        populateTable();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        sharedPref = getSharedPreferences(
+                "com.pat0007.spendingmanagementsql.PREFERENCE_FILE_KEY", MODE_PRIVATE);
+        editor = sharedPref.edit();
+
+        editor.putString("HEADER", header.getText().toString());
+        String balance = header.getText().toString().substring(18);
+        editor.putString("BALANCE", balance);
+        editor.apply();
     }
 
     private void enter_btn_clicked() {
@@ -90,5 +115,19 @@ public class MainActivity extends AppCompatActivity {
         tableRow.addView(categoryText);
 
         tableLayout.addView(tableRow);
+    }
+
+    private void populateTable() {
+        Cursor result = myDB.getAllData();
+        if (result.getCount() == 0) {
+            return;
+        }
+        while (result.moveToNext()) {
+            String date = result.getString(1);
+            String amount = result.getString(2);
+            String category = result.getString(3);
+
+            addRow(date, amount, category);
+        }
     }
 }
