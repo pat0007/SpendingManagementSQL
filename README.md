@@ -10,7 +10,7 @@ Modified version of the SpendingManagement program, this time utilizing SQLite.
 ## UI Sketches
 Empty History UI sketch:
 
-<img src="images/emptyHistoryUI.png" width="250" >
+<img src="images/emptyHistoryI.png" width="250" >
 
 UI sketch with entries:
 
