@@ -13,10 +13,10 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.10" />
+        app:layout_constraintVertical_bias="0.046" />
 
     <EditText
         android:id="@+id/date"
@@ -67,12 +67,12 @@
         app:layout_constraintTop_toBottomOf="@+id/header" />
 
     <Button
-        android:id="@+id/enter_btn"
+        android:id="@+id/enterButton"
         android:layout_width="82dp"
         android:layout_height="48dp"
         android:layout_marginStart="155dp"
         android:layout_marginLeft="155dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="24dp"
         android:text="@string/enter_btn_text"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textStyle="bold"
@@ -91,16 +91,59 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/enter_btn" />
+        app:layout_constraintTop_toBottomOf="@+id/enterButton" />
+
+    <EditText
+        android:id="@+id/dateSearchField"
+        android:layout_width="263dp"
+        android:layout_height="42dp"
+        android:layout_marginStart="17dp"
+        android:layout_marginLeft="17dp"
+        android:layout_marginTop="18dp"
+        android:autofillHints=""
+        android:ems="10"
+        android:gravity="center"
+        android:hint="@string/searchFieldHint"
+        android:inputType="text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/history"
+        tools:ignore="TextFields" />
+
+    <EditText
+        android:id="@+id/typeSearchField"
+        android:layout_width="263dp"
+        android:layout_height="42dp"
+        android:layout_marginStart="17dp"
+        android:layout_marginLeft="17dp"
+        android:layout_marginTop="8dp"
+        android:autofillHints=""
+        android:ems="10"
+        android:gravity="center"
+        android:hint="@string/search_by_type"
+        android:inputType="text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dateSearchField" />
+
+    <Button
+        android:id="@+id/searchButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="152dp"
+        android:text="@string/search_button_text"
+        app:layout_constraintStart_toEndOf="@+id/typeSearchField"
+        app:layout_constraintTop_toBottomOf="@+id/purpose" />
 
     <ScrollView
-        android:layout_width="391dp"
-        android:layout_height="417dp"
+        android:id="@+id/scrollView2"
+        android:layout_width="393dp"
+        android:layout_height="339dp"
         android:isScrollContainer="false"
-        android:paddingTop="50dp"
-        android:paddingBottom="20dp"
         android:paddingLeft="20dp"
+        android:paddingTop="50dp"
         android:paddingRight="20dp"
+        android:paddingBottom="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 

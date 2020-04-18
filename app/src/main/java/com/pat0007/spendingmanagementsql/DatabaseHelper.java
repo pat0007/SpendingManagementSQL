@@ -12,7 +12,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "TransactionHistory.db";
     public static final String TABLE_NAME = "transactionsTable";
     public static final String COL_1 = "ID";
-    public static final String COL_2 = "DATE";
+    public static final String COL_2 = "TRANSACTION_DATE";
     public static final String COL_3 = "AMOUNT";
     public static final String COL_4 = "CATEGORY";
 
@@ -23,7 +23,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE " + TABLE_NAME + " (ID INTEGER PRIMARY KEY AUTOINCREMENT," +
-                "DATE TEXT,AMOUNT TEXT,CATEGORY TEXT)");
+                "TRANSACTION_DATE DATE,AMOUNT TEXT,CATEGORY TEXT)");
     }
 
     @Override
@@ -32,11 +32,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public boolean insertData(String date, String amount, String category) {
+    public boolean insertData(String transactionDate, String amount, String category) {
         ContentValues contentValues = new ContentValues();
         SQLiteDatabase db = this.getWritableDatabase();
 
-        contentValues.put(COL_2, date);
+        contentValues.put(COL_2, transactionDate);
         contentValues.put(COL_3, amount);
         contentValues.put(COL_4, category);
         long isInsertSuccessful = db.insert(TABLE_NAME, null, contentValues);
@@ -49,6 +49,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public Cursor getAllData() {
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor result = db.rawQuery("SELECT * FROM " + TABLE_NAME, null);
+        return result;
+    }
+
+    public Cursor getSelectData(String query) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor result = db.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE " + query, null);
         return result;
     }
 }

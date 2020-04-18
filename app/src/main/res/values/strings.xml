@@ -8,4 +8,7 @@
     <string name="col1Header">Date</string>
     <string name="col2Header">Amount</string>
     <string name="col3Header">Category</string>
+    <string name="searchFieldHint">Search by Date</string>
+    <string name="search_button_text">Search</string>
+    <string name="search_by_type">Search by Type</string>
 </resources>

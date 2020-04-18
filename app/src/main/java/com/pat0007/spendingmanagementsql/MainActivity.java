@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,10 +18,10 @@ import java.math.BigDecimal;
 public class MainActivity extends AppCompatActivity {
 
     BigDecimal balance;
-    Button enter_btn;
+    Button enterButton, searchButton;
     Context applicationContext;
     DatabaseHelper myDB;
-    EditText date, amount, purpose;
+    EditText date, amount, purpose, dateSearchField, typeSearchField;
     SharedPreferences sharedPref;
     SharedPreferences.Editor editor;
     TableLayout tableLayout;
@@ -31,7 +30,14 @@ public class MainActivity extends AppCompatActivity {
     private View.OnClickListener listen = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            enter_btn_clicked();
+            switch(v.getId()) {
+                case R.id.enterButton:
+                    enter_btn_clicked();
+                    break;
+                case R.id.searchButton:
+                    search();
+                    break;
+            }
         }
     };
 
@@ -45,14 +51,18 @@ public class MainActivity extends AppCompatActivity {
         date = findViewById(R.id.date);
         amount = findViewById(R.id.amount);
         purpose = findViewById(R.id.purpose);
-        enter_btn = findViewById(R.id.enter_btn);
+        enterButton = findViewById(R.id.enterButton);
+        searchButton = findViewById(R.id.searchButton);
+        dateSearchField = findViewById(R.id.dateSearchField);
+        typeSearchField = findViewById(R.id.typeSearchField);
         tableLayout = findViewById(R.id.transactionsTable);
         applicationContext = this;
 
         sharedPref = getSharedPreferences(
                 "com.pat0007.spendingmanagementsql.PREFERENCE_FILE_KEY", MODE_PRIVATE);
 
-        enter_btn.setOnClickListener(listen);
+        enterButton.setOnClickListener(listen);
+        searchButton.setOnClickListener(listen);
 
         balance = new BigDecimal(sharedPref.getString("BALANCE", "0"));
         header.setText(sharedPref.getString("HEADER", "Current Balance: $0"));
@@ -128,6 +138,30 @@ public class MainActivity extends AppCompatActivity {
             String category = result.getString(3);
 
             addRow(date, amount, category);
+        }
+    }
+
+    private void search() {
+        String dateQuery = dateSearchField.getText().toString();
+        String typeQuery = typeSearchField.getText().toString();
+        Cursor result;
+
+        if (dateQuery != null) {
+            //do something
+            System.out.println(dateQuery);
+            StringBuilder sb = new StringBuilder(dateQuery);
+            sb.insert(0, "TRANSACTION_DATE ");
+            result = myDB.getSelectData(sb.toString());
+            if (result.getCount() == 0) {
+                return;
+            }
+            while (result.moveToNext()) {
+                System.out.println(result);
+            }
+        }
+        if (typeQuery != null) {
+            //do something
+            System.out.println(typeQuery);
         }
     }
 }
