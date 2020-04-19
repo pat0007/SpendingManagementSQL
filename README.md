@@ -7,6 +7,12 @@ Modified version of the SpendingManagement program, this time utilizing SQLite.
 
 3) As a user, I want to be able to close the app and return to it later without losing my data. I will quit the app entirely and force close it. I will then reopen it. The system will respond by having all of my information already populated on the screen for me.
 
+4) As a user, I want to be able to filter my database data. I want to search for all transactions between 04/05/2020 and 04/10/2020. I type “between 04/05/2020 and 04/10/2020” in the “Search by Date” text field, and the system responds by showing me the data between these dates.
+
+5) As a user, I want to be able to filter my database data. I want to search for all transactions greater than $100. I type “> 100” in the “Search by Amount” text field, and the system responds by showing me all transactions greater than $100.
+
+6) As a user, I want to be able to filter my database data. I want to search for all transactions between 04/05/2020 and 04/10/2020 while also searching for all transactions greater than $100. I type “between 04/05/2020 and 04/10/2020” in the “Search by Date” text field and “> 100” in the “Search by Amount” text field, and the system responds by showing me the data between these dates that are greater than $100.
+
 ## UI Sketches
 Empty History UI sketch:
 
