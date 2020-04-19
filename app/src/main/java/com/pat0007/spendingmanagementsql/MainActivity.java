@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -21,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
     Button enterButton, searchButton;
     Context applicationContext;
     DatabaseHelper myDB;
-    EditText date, amount, purpose, dateSearchField, typeSearchField;
+    EditText date, amount, purpose, dateSearchField, amountSearchField;
     SharedPreferences sharedPref;
     SharedPreferences.Editor editor;
     TableLayout tableLayout;
@@ -54,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
         enterButton = findViewById(R.id.enterButton);
         searchButton = findViewById(R.id.searchButton);
         dateSearchField = findViewById(R.id.dateSearchField);
-        typeSearchField = findViewById(R.id.typeSearchField);
+        amountSearchField = findViewById(R.id.amountSearchField);
         tableLayout = findViewById(R.id.transactionsTable);
         applicationContext = this;
 
@@ -151,79 +152,82 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void search() {
-        String dateQuery = dateSearchField.getText().toString();
-        String typeQuery = typeSearchField.getText().toString();
         Cursor result;
 
-        if (!dateQuery.equals("")) {
-            if (dateQuery.startsWith("before")) {
-                String query = "TRANSACTION_DATE < '" + dateQuery.substring(7) + "'";
-                result = myDB.getSelectData(query);
+        if (!TextUtils.isEmpty(amountSearchField.getText()) &&
+                !TextUtils.isEmpty(dateSearchField.getText())) {
+
+
+            String dateSearchQuery = getDateSearchQuery();
+            String amountSearchQuery = getAmountSearchQuery();
+            String query = dateSearchQuery + amountSearchQuery;
+
+            result = myDB.getSelectData(query);
                 if (result.getCount() == 0) {
                     System.out.println("No results found!");
                     return;
                 }
-                while (result.moveToNext()) {
-                    System.out.print(result.getString(1));
-                    System.out.print(" ");
-                    System.out.print(result.getString(2));
-                    System.out.print(" ");
-                    System.out.println(result.getString(3));
+                else {
+                    printResult(result);
                 }
-            }
-            else if (dateQuery.startsWith("on")) {
-                String query = "TRANSACTION_DATE = '" + dateQuery.substring(3) + "'";
-                result = myDB.getSelectData(query);
-                if (result.getCount() == 0) {
-                    System.out.println("This bitch empty");
-                    return;
-                }
-                while (result.moveToNext()) {
-                    System.out.print(result.getString(1));
-                    System.out.print(" ");
-                    System.out.print(result.getString(2));
-                    System.out.print(" ");
-                    System.out.println(result.getString(3));
-                }
-            }
-            else if (dateQuery.startsWith("after")) {
-                String query = "TRANSACTION_DATE > '" + dateQuery.substring(6) + "'";
-                result = myDB.getSelectData(query);
-                if (result.getCount() == 0) {
-                    System.out.println("No results found!");
-                    return;
-                }
-                while (result.moveToNext()) {
-                    System.out.print(result.getString(1));
-                    System.out.print(" ");
-                    System.out.print(result.getString(2));
-                    System.out.print(" ");
-                    System.out.println(result.getString(3));
-                }
-            }
-            else if (dateQuery.startsWith("between")) {
-                String query = "TRANSACTION_DATE BETWEEN '" + dateQuery.substring(8, 18) + "'" +
-                        " AND '" + dateQuery.substring(23, 33) + "'";
-                result = myDB.getSelectData(query);
-                if (result.getCount() == 0) {
-                    System.out.println("No results found!");
-                    return;
-                }
-                while (result.moveToNext()) {
-                    System.out.print(result.getString(1));
-                    System.out.print(" ");
-                    System.out.print(result.getString(2));
-                    System.out.print(" ");
-                    System.out.println(result.getString(3));
-                }
-            }
-            else {
-                System.out.println("Error! Please enter your search format correctly.");
-            }
         }
-        if (!typeQuery.equals("")) {
-            String query = "AMOUNT " + typeQuery;
-            System.out.println(query);
+    }
+
+    private String getDateSearchQuery() {
+        if (dateSearchField.getText().toString().startsWith("before")) {
+            return "TRANSACTION_DATE < '" + dateSearchField.getText().toString().substring(7) + "'";
+        }
+        else if (dateSearchField.getText().toString().startsWith("on")) {
+            return "TRANSACTION_DATE = '" + dateSearchField.getText().toString().substring(3) + "'";
+        }
+        else if (dateSearchField.getText().toString().startsWith("after")) {
+            return "TRANSACTION_DATE > '" + dateSearchField.getText().toString().substring(6) + "'";
+        }
+        else if (dateSearchField.getText().toString().startsWith("between")) {
+            return "TRANSACTION_DATE BETWEEN '" +
+                    dateSearchField.getText().toString().substring(8, 18) + "' AND '" +
+                    dateSearchField.getText().toString().substring(23,33) + "'";
+        }
+        else {
+            return "Please enter correct date search term.";
+        }
+    }
+
+    private String getAmountSearchQuery() {
+        int packedInt;
+        if (amountSearchField.getText().toString().substring(0,2).equals("< ") ||
+                amountSearchField.getText().toString().substring(0,2).equals("> ")) {
+            packedInt = Integer.parseInt(amountSearchField.getText().toString().substring(2));
+            BigDecimal bd = new BigDecimal(packedInt);
+            bd = bd.scaleByPowerOfTen(2);
+            String amount = bd.toString();
+            return " AND AMOUNT " + amountSearchField.getText().toString().substring(0,2) + amount;
+        }
+        else if (amountSearchField.getText().toString().contains("<=") ||
+                amountSearchField.getText().toString().contains(">=")) {
+            packedInt = Integer.parseInt(amountSearchField.getText().toString().substring(3));
+            BigDecimal bd = new BigDecimal(packedInt);
+            bd = bd.scaleByPowerOfTen(2);
+            String amount = bd.toString();
+            return " AND AMOUNT " + amountSearchField.getText().toString().substring(0,3) + amount;
+        }
+        else {
+            return "\nPlease enter correct amount search term.";
+        }
+    }
+
+    private void printResult(Cursor toBePrinted) {
+        while (toBePrinted.moveToNext()) {
+            System.out.print(toBePrinted.getString(1));
+            System.out.print(" ");
+
+            Integer packedInt = toBePrinted.getInt(2);
+            BigDecimal amount = new BigDecimal(packedInt);
+            amount = amount.scaleByPowerOfTen(-2);
+            System.out.print("$" + amount);
+
+            System.out.print(" ");
+            System.out.println(toBePrinted.getString(3));
         }
     }
 }

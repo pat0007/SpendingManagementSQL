@@ -10,5 +10,5 @@
     <string name="col3Header">Category</string>
     <string name="searchFieldHint">Search by Date</string>
     <string name="search_button_text">Search</string>
-    <string name="search_by_type">Search by Type</string>
+    <string name="search_by_type">Search by Amount</string>
 </resources>
