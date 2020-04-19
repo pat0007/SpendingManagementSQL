@@ -171,6 +171,37 @@ public class MainActivity extends AppCompatActivity {
                     printResult(result);
                 }
         }
+        else if (!TextUtils.isEmpty(dateSearchField.getText()) &&
+                TextUtils.isEmpty(amountSearchField.getText())) {
+
+            String dateSearchQuery = getDateSearchQuery();
+
+            result = myDB.getSelectData(dateSearchQuery);
+            if (result.getCount() == 0) {
+                System.out.println("No results found!");
+                return;
+            }
+            else {
+                printResult(result);
+            }
+        }
+        else if (TextUtils.isEmpty(dateSearchField.getText()) &&
+                !TextUtils.isEmpty(amountSearchField.getText())) {
+
+            String amountSearchQuery = getAmountSearchQuery();
+
+            result = myDB.getSelectData(amountSearchQuery);
+            if (result.getCount() == 0) {
+                System.out.println("No results found!");
+                return;
+            }
+            else {
+                printResult(result);
+            }
+        }
+        else {
+            System.out.println("No search terms added.");
+        }
     }
 
     private String getDateSearchQuery() {
