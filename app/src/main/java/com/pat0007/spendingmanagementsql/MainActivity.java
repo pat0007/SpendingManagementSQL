@@ -145,7 +145,6 @@ public class MainActivity extends AppCompatActivity {
             BigDecimal amount = new BigDecimal(packedInt);
             amount = amount.scaleByPowerOfTen(-2);
             String amountText = amount.toString();
-            System.out.println(amountText);
 
             addRow(date, amountText, category);
         }
@@ -156,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
         String typeQuery = typeSearchField.getText().toString();
         Cursor result;
 
-        if (dateQuery != null) {
+        if (!dateQuery.equals("")) {
             if (dateQuery.startsWith("before")) {
                 String query = "TRANSACTION_DATE < '" + dateQuery.substring(7) + "'";
                 result = myDB.getSelectData(query);
@@ -222,9 +221,9 @@ public class MainActivity extends AppCompatActivity {
                 System.out.println("Error! Please enter your search format correctly.");
             }
         }
-        if (typeQuery != null) {
-            //do something
-            System.out.println(typeQuery);
+        if (!typeQuery.equals("")) {
+            String query = "AMOUNT " + typeQuery;
+            System.out.println(query);
         }
     }
 }
