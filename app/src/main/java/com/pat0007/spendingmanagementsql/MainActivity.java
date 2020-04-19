@@ -85,15 +85,20 @@ public class MainActivity extends AppCompatActivity {
 
     private void enter_btn_clicked() {
         String dateText = date.getText().toString();
-        String amountText = amount.getText().toString();
         String purposeText = purpose.getText().toString();
+        int packedInt;
+
+        String amountText = amount.getText().toString();
+        BigDecimal amount = new BigDecimal(amountText);
+
+        packedInt = amount.scaleByPowerOfTen(2).intValue();
 
         BigDecimal newBalance = new BigDecimal(amountText);
 
         balance = balance.add(newBalance);
         header.setText("Current Balance: $" + balance);
 
-        myDB.insertData(dateText, amountText, purposeText);
+        myDB.insertData(dateText, packedInt, purposeText);
 
         addRow(dateText, amountText, purposeText);
     }
@@ -134,10 +139,15 @@ public class MainActivity extends AppCompatActivity {
         }
         while (result.moveToNext()) {
             String date = result.getString(1);
-            String amount = result.getString(2);
             String category = result.getString(3);
 
-            addRow(date, amount, category);
+            Integer packedInt = result.getInt(2);
+            BigDecimal amount = new BigDecimal(packedInt);
+            amount = amount.scaleByPowerOfTen(-2);
+            String amountText = amount.toString();
+            System.out.println(amountText);
+
+            addRow(date, amountText, category);
         }
     }
 
@@ -147,16 +157,69 @@ public class MainActivity extends AppCompatActivity {
         Cursor result;
 
         if (dateQuery != null) {
-            //do something
-            System.out.println(dateQuery);
-            StringBuilder sb = new StringBuilder(dateQuery);
-            sb.insert(0, "TRANSACTION_DATE ");
-            result = myDB.getSelectData(sb.toString());
-            if (result.getCount() == 0) {
-                return;
+            if (dateQuery.startsWith("before")) {
+                String query = "TRANSACTION_DATE < '" + dateQuery.substring(7) + "'";
+                result = myDB.getSelectData(query);
+                if (result.getCount() == 0) {
+                    System.out.println("No results found!");
+                    return;
+                }
+                while (result.moveToNext()) {
+                    System.out.print(result.getString(1));
+                    System.out.print(" ");
+                    System.out.print(result.getString(2));
+                    System.out.print(" ");
+                    System.out.println(result.getString(3));
+                }
             }
-            while (result.moveToNext()) {
-                System.out.println(result);
+            else if (dateQuery.startsWith("on")) {
+                String query = "TRANSACTION_DATE = '" + dateQuery.substring(3) + "'";
+                result = myDB.getSelectData(query);
+                if (result.getCount() == 0) {
+                    System.out.println("This bitch empty");
+                    return;
+                }
+                while (result.moveToNext()) {
+                    System.out.print(result.getString(1));
+                    System.out.print(" ");
+                    System.out.print(result.getString(2));
+                    System.out.print(" ");
+                    System.out.println(result.getString(3));
+                }
+            }
+            else if (dateQuery.startsWith("after")) {
+                String query = "TRANSACTION_DATE > '" + dateQuery.substring(6) + "'";
+                result = myDB.getSelectData(query);
+                if (result.getCount() == 0) {
+                    System.out.println("No results found!");
+                    return;
+                }
+                while (result.moveToNext()) {
+                    System.out.print(result.getString(1));
+                    System.out.print(" ");
+                    System.out.print(result.getString(2));
+                    System.out.print(" ");
+                    System.out.println(result.getString(3));
+                }
+            }
+            else if (dateQuery.startsWith("between")) {
+                String query = "TRANSACTION_DATE BETWEEN '" + dateQuery.substring(8, 18) + "'" +
+                        " AND '" + dateQuery.substring(23, 33) + "'";
+                result = myDB.getSelectData(query);
+                if (result.getCount() == 0) {
+                    System.out.println("No results found!");
+                    return;
+                }
+                while (result.moveToNext()) {
+                    System.out.print(result.getString(1));
+                    System.out.print(" ");
+                    System.out.print(result.getString(2));
+                    System.out.print(" ");
+                    System.out.println(result.getString(3));
+                }
+            }
+            else {
+                System.out.println("Error! Please enter your search format correctly.");
             }
         }
         if (typeQuery != null) {

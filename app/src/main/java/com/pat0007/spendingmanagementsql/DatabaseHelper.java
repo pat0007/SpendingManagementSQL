@@ -23,7 +23,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE " + TABLE_NAME + " (ID INTEGER PRIMARY KEY AUTOINCREMENT," +
-                "TRANSACTION_DATE DATE,AMOUNT TEXT,CATEGORY TEXT)");
+                "TRANSACTION_DATE DATE,AMOUNT INTEGER,CATEGORY TEXT)");
     }
 
     @Override
@@ -32,7 +32,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public boolean insertData(String transactionDate, String amount, String category) {
+    public boolean insertData(String transactionDate, Integer amount, String category) {
         ContentValues contentValues = new ContentValues();
         SQLiteDatabase db = this.getWritableDatabase();
 
